@@ -5,6 +5,8 @@ import javax.swing.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.zip.CRC32;
 
 /**
@@ -12,8 +14,8 @@ import java.util.zip.CRC32;
  */
 public class RootWindow {
     private JPanel rootPanel;
-    private JComboBox cb_crc_type;
-    private JComboBox cb_file_type;
+    private JComboBox<String> cb_crc_type;
+    private JComboBox<String> cb_file_type;
     private JTextField tf_set_file;
     private JButton btn_choose_file;
     private JLabel lb_crc_dec;
@@ -26,6 +28,10 @@ public class RootWindow {
     private JLabel lb_crc_oct;
     /** Выбранный файл */
     private File _selectedFile;
+    /** Логер */
+    public static final Logger logger = Logger.getLogger(
+            RootWindow.class.getName());
+
     /** Конструктор */
     public RootWindow() {
         _selectedFile = new File("");
@@ -71,48 +77,51 @@ public class RootWindow {
     /** Подсчет КС по алгоритму CRC32 */
     private void CRC32Calculate_v() {
         try {
+            logger.info("Запуск подсчета CRC32 для файла " + _selectedFile);
             CRC32 CRC32_o = new CRC32();
             FileInputStream fis = new FileInputStream(_selectedFile);
             int c;
             while ((c = fis.read()) != -1) {
                 CRC32_o.update(c);
             }
-            lb_crc_dec.setText("DEC: " + String.valueOf(CRC32_o.getValue()));
+            lb_crc_dec.setText("DEC: " + CRC32_o.getValue());
             lb_crc_hex.setText("HEX: " + Long.toHexString(CRC32_o.getValue()).toUpperCase());
             lb_crc_oct.setText("OCT: " + Long.toOctalString(CRC32_o.getValue()));
         } catch (IOException e) {
-
+            logger.log(Level.SEVERE, "Не удалось обработать файл " + _selectedFile, e);
         } catch (NullPointerException e) {
-
+            logger.log(Level.SEVERE, "Не удалось посчитать CRC16 файла " + _selectedFile, e);
         } catch (ArrayIndexOutOfBoundsException e) {
-
+            logger.log(Level.SEVERE, "Выход за границы массива ", e);
         }
     }
 
     /** Подсчет КС по алгоритму CRC32 */
     private void CRC16Calculate_v() {
         try {
+            logger.info("Запуск подсчета CRC16 для файла " + _selectedFile);
             CRC16 CRC32_o = new CRC16();
             FileInputStream fis = new FileInputStream(_selectedFile);
             int c;
             while ((c = fis.read()) != -1) {
                 CRC32_o.update((byte) c);
             }
-            lb_crc_dec.setText("DEC: " + String.valueOf(CRC32_o.value));
+            lb_crc_dec.setText("DEC: " + CRC32_o.value);
             lb_crc_hex.setText("HEX: " + Long.toHexString(CRC32_o.value).toUpperCase());
             lb_crc_oct.setText("OCT: " + Long.toOctalString(CRC32_o.value));
         } catch (IOException e) {
-
+            logger.log(Level.SEVERE, "Не удалось обработать файл " + _selectedFile, e);
         } catch (NullPointerException e) {
-
+            logger.log(Level.SEVERE, "Не удалось посчитать CRC16 файла " + _selectedFile, e);
         } catch (ArrayIndexOutOfBoundsException e) {
-
+            logger.log(Level.SEVERE, "Выход за границы массива ", e);
         }
     }
 
     /** Подсчет КС по алгоритму CKSum */
     private void CKSumCalculate_v() {
         try {
+            logger.info("Запуск подсчета CKSum для файла " + _selectedFile);
             JCKSum JCKSum_o = new JCKSum();
             FileInputStream fis = new FileInputStream(_selectedFile);
             int c;
@@ -124,11 +133,11 @@ public class RootWindow {
             lb_crc_hex.setText("HEX: " + Integer.toHexString(Value_i).toUpperCase());
             lb_crc_oct.setText("OCT: " + Integer.toOctalString(Value_i));
         } catch (IOException e) {
-
+            logger.log(Level.SEVERE, "Не удалось обработать файл " + _selectedFile, e);
         } catch (NullPointerException e) {
-
+            logger.log(Level.SEVERE, "Не удалось посчитать CRC16 файла " + _selectedFile, e);
         } catch (ArrayIndexOutOfBoundsException e) {
-
+            logger.log(Level.SEVERE, "Выход за границы массива ", e);
         }
     }
 }
