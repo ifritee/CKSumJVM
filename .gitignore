@@ -1,0 +1,8 @@
+# KDE directory preferences
+.directory
+*.user
+.~lock.*
+logs
+out
+
+ 
