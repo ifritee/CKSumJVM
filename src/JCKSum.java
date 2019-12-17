@@ -1,3 +1,8 @@
+import com.sun.org.apache.bcel.internal.generic.INEG;
+
+import java.nio.ByteBuffer;
+import java.util.concurrent.atomic.AtomicBoolean;
+
 /**
  * Класс для расчета КС по алгоритму CKSUM
  * @version 1.0.0
@@ -10,6 +15,8 @@ public class JCKSum {
     private int _TempleValue_i;
     /** Размер добавленных данных */
     private long _Size_l;
+    /** Состояние работы для потоков */
+    private AtomicBoolean _ThreadRunFlag_ab;
 
     /** Конструктор */
     public JCKSum() {
@@ -67,29 +74,78 @@ public class JCKSum {
                 0x933eb0bb, 0x97ffad0c, 0xafb010b1, 0xab710d06, 0xa6322bdf,
                 0xa2f33668, 0xbcb4666d, 0xb8757bda, 0xb5365d03, 0xb1f740b4
         };
+        _ThreadRunFlag_ab = new AtomicBoolean();
         erase_v();
     }
 
+    /**
+     * Добавляет очередной байт данных для расчета КС
+     * @param Data_ab Очередной байт данных
+     */
     public void addByte_v(int Data_ab) {
-        try {
-            ++_Size_l;
-            _TempleValue_i = (_TempleValue_i << 8) ^ CRCTabIndexes_ai[(_TempleValue_i >>> 24) ^ Data_ab];
-        } catch (ArrayIndexOutOfBoundsException exception) {
-
-        }
+        ++_Size_l;
+        _TempleValue_i = (_TempleValue_i << 8) ^ CRCTabIndexes_ai[(_TempleValue_i >>> 24) ^ Data_ab];
     }
 
+    /**
+     * Очищает временные данные
+     */
     public void erase_v() {
         _Size_l = 0;
         _TempleValue_i = 0;
     }
 
+    /**
+     * Дорасчитывает КС м выдает результат
+     * @return Расчетная КС
+     */
     public int getValue_i() {
-        int TempSize_l = (int)_Size_l;
-        int Value_i = _TempleValue_i;
-        int c = 0;
+        return getValue_i(_TempleValue_i, _Size_l);
+    }
+
+    /**
+     * Расчет дополтельный 4-х байт
+     * @param FinalCRC_l Желаемая КС
+     */
+    public void CalcPostBytes_v(long FinalCRC_l) {
+        final int CPUCount_i = Runtime.getRuntime().availableProcessors();
+        final int Pie_i = (Integer.MAX_VALUE / CPUCount_i) * 2;
+        final long TempSize_l = _Size_l + 4;
+        final int TempValue_i = _TempleValue_i;
+        _ThreadRunFlag_ab.set(false);
+        for (int i = 0; i < CPUCount_i; ++i) {  // Пробежимся по всем допустимым потокам для вычисления дополнительных 4-х байт
+            final int StartNumber_i = Integer.MIN_VALUE + Pie_i * i;
+            final int StopNumber_i = (i == (CPUCount_i - 1)) ? Integer.MAX_VALUE : Integer.MIN_VALUE + Pie_i * (i + 1);
+            int finalI = i;
+            Runnable runnable_o = () -> {
+                System.out.println("START " + finalI);
+                for (int j = StartNumber_i; (j <= StopNumber_i) && (!_ThreadRunFlag_ab.get()); ++j) {
+                    int val = TempValue_i;
+                    byte[] bytes = ByteBuffer.allocate(4).putInt(j).array();
+                    for (byte Byte_c : bytes) {
+                        val = (val << 8) ^ CRCTabIndexes_ai[(val >>> 24) ^ (Byte_c & 0xFF)];
+                    }
+                    if (FinalCRC_l == getValue_i(val, TempSize_l)) {
+                        System.out.println("OUT: " + j);
+                        _ThreadRunFlag_ab.set(true);
+                    }
+                }
+                System.out.println("STOP " + finalI);
+            };
+            (new Thread(runnable_o)).start();
+        }
+    }
+
+    /**
+     * Дорасчитывает КС м выдает результат
+     * @return Расчетная КС
+     */
+    private int getValue_i(int TempValue_i, long Size_l) {
+        int TempSize_l = (int)Size_l;
+        int Value_i = TempValue_i;
+        int c;
         while (TempSize_l != 0) {
-            c = TempSize_l & 0377;
+            c = TempSize_l & 255;
             TempSize_l >>= 8;
             Value_i = (Value_i << 8) ^ CRCTabIndexes_ai[(Value_i >>> 24) ^ c];
         }

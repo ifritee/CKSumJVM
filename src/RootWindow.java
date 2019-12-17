@@ -1,5 +1,4 @@
 import sun.misc.CRC16;
-import sun.plugin2.gluegen.runtime.CPU;
 
 import javax.swing.*;
 import java.io.File;
@@ -28,13 +27,14 @@ public class RootWindow {
     private JLabel lb_crc_oct;
     /** Выбранный файл */
     private File _selectedFile;
+    JCKSum _JCKSum_o;
     /** Логер */
-    public static final Logger logger = Logger.getLogger(
-            RootWindow.class.getName());
+    public static final Logger logger = Logger.getLogger(RootWindow.class.getName());
 
     /** Конструктор */
     public RootWindow() {
         _selectedFile = new File("");
+        _JCKSum_o = new JCKSum();
         btn_choose_file.addActionListener(e -> { // Действия при выборе файла
             JFileChooser fileChooser = new JFileChooser();
             int ReturnCode_i = fileChooser.showOpenDialog(rootPanel);
@@ -65,9 +65,45 @@ public class RootWindow {
             }
         });
         btn_calculate.addActionListener(e -> {  // Действия при расчете
-            int CPUCount_i = Runtime.getRuntime().availableProcessors();
-            System.out.println(CPUCount_i);
+            if (_selectedFile.exists() && _selectedFile.canRead()) {
+                try {
+                    long parseLong = Long.parseLong(tf_crc_dec.getText());
+                    if (cb_crc_type.getSelectedItem() == "CRC16") {
+                        PostBytesCalcCRC16_v(parseLong);
+                    } else if (cb_crc_type.getSelectedItem() == "CRC32") {
+                        PostBytesCalcCRC32_v(parseLong);
+                    } else if (cb_crc_type.getSelectedItem() == "CKSum") {
+                        PostBytesCalcCKSum_v(parseLong);
+                    }
+                } catch (NumberFormatException ex) {
+                    logger.log(Level.SEVERE, "Пустая строка с желаемой КС ", e);
+                }
+            }
         });
+    }
+
+    /**
+     * Запуск расчета доп. 4-х байт данных
+     * @param parseLong Дребуемая КС
+     */
+    private void PostBytesCalcCRC32_v(long parseLong) {
+
+    }
+
+    /**
+     * Запуск расчета доп. 2-х байт данных
+     * @param parseLong Дребуемая КС
+     */
+    private void PostBytesCalcCRC16_v(long parseLong) {
+
+    }
+
+    /**
+     * Запуск расчета доп. 4-х байт данных
+     * @param parseLong Дребуемая КС
+     */
+    private void PostBytesCalcCKSum_v(long parseLong) {
+        _JCKSum_o.CalcPostBytes_v(parseLong);
     }
 
     public JPanel getRootPanel() {
@@ -122,13 +158,13 @@ public class RootWindow {
     private void CKSumCalculate_v() {
         try {
             logger.info("Запуск подсчета CKSum для файла " + _selectedFile);
-            JCKSum JCKSum_o = new JCKSum();
+            _JCKSum_o.erase_v();
             FileInputStream fis = new FileInputStream(_selectedFile);
             int c;
             while ((c = fis.read()) != -1) {
-                JCKSum_o.addByte_v(c);
+                _JCKSum_o.addByte_v(c);
             }
-            int Value_i = JCKSum_o.getValue_i();
+            int Value_i = _JCKSum_o.getValue_i();
             lb_crc_dec.setText("DEC: " + Value_i);
             lb_crc_hex.setText("HEX: " + Integer.toHexString(Value_i).toUpperCase());
             lb_crc_oct.setText("OCT: " + Integer.toOctalString(Value_i));
