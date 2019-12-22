@@ -4,7 +4,6 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Timer;
@@ -34,9 +33,9 @@ public class RootWindow implements Observer {
     private JLabel lb_correcting_bytes;
     /** Выбранный файл */
     private File _selectedFile;
-    /** Объект для рсчета cksum */
+    /** Объект для рсчета контрольной суммы */
     private JCKSum _JCKSum_o;
-    /** Объект для рсчета CRC16 */
+    /** Объект для рсчета CRC-16 */
     private JCRC16 _JCRC16_o;
     /** Словарь делителей */
     HashMap<JTextField, Integer> _RadixDict_map;

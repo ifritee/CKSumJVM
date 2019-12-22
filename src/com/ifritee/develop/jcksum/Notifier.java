@@ -1,7 +1,6 @@
 package com.ifritee.develop.jcksum;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Notifier {
     /** Реализация singleton Double checked locking & volatile */
@@ -19,11 +18,11 @@ public class Notifier {
         return instance;
     }
     /** Массив наблюдателей */
-    private List<Observer> _Observes_lst;
+    private ArrayList<Observer> _Observes_lst;
 
     /** Конструктор */
     Notifier() {
-        _Observes_lst = new ArrayList();
+        _Observes_lst = new ArrayList<>();
     }
 
     /**

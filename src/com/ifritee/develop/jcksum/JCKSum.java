@@ -4,7 +4,7 @@ import java.nio.ByteBuffer;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
- * Класс для расчета КС по алгоритму CKSUM
+ * Класс для расчета КС по алгоритму JCKSum
  * @version 1.0.0
  * @author Никишин Е.В.
  */

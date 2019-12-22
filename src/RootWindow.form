@@ -97,7 +97,7 @@
         </constraints>
         <properties>
           <horizontalAlignment value="10"/>
-          <text value="DEC:"/>
+          <text resource-bundle="strings" key="lb_crc_dec"/>
         </properties>
       </component>
       <component id="cde46" class="javax.swing.JLabel">
@@ -137,7 +137,7 @@
           <grid row="6" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <text value="DEC"/>
+          <text resource-bundle="strings" key="lb_crc_dec"/>
         </properties>
       </component>
       <component id="b984a" class="javax.swing.JLabel">
@@ -145,7 +145,7 @@
           <grid row="7" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <text value="HEX"/>
+          <text resource-bundle="strings" key="lb_crc_hex"/>
         </properties>
       </component>
       <component id="3b956" class="javax.swing.JLabel">
@@ -153,7 +153,7 @@
           <grid row="8" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <text value="OCT"/>
+          <text resource-bundle="strings" key="lb_crc_oct"/>
         </properties>
       </component>
       <component id="3879e" class="javax.swing.JLabel" binding="lb_crc_hex">
@@ -162,7 +162,7 @@
         </constraints>
         <properties>
           <horizontalAlignment value="10"/>
-          <text value="HEX:"/>
+          <text resource-bundle="strings" key="lb_crc_hex"/>
         </properties>
       </component>
       <component id="a368f" class="javax.swing.JLabel" binding="lb_crc_oct">
@@ -171,7 +171,7 @@
         </constraints>
         <properties>
           <horizontalAlignment value="10"/>
-          <text value="OCT:"/>
+          <text resource-bundle="strings" key="lb_crc_oct"/>
         </properties>
       </component>
       <grid id="55b16" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
