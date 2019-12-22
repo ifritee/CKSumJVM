@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="9814fe05-0721-4b85-83d7-25fc8b49c97b" name="Default Changelist" comment="">
+    <list default="true" id="9814fe05-0721-4b85-83d7-25fc8b49c97b" name="Default Changelist" comment="Доработал посчет КС и вывод корректирующих байт в форму">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/JCKSum.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/MainClass.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/RootWindow.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/RootWindow.form" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RootWindow.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/strings.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/strings.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/strings_ru.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/strings_ru.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/ifritee/develop/jcksum/RootWindow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/ifritee/develop/jcksum/RootWindow.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -30,6 +26,7 @@
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="UPDATE_TYPE" value="MERGE" />
   </component>
   <component name="ProjectId" id="1Uqoj8k5XAOBYu0oPHuZR8XNu4M" />
   <component name="ProjectViewState">
@@ -95,7 +92,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Добавил логирование действий" />
     <MESSAGE value="Добавил расчет корректируещих байтов для cksum" />
-    <option name="LAST_COMMIT_MESSAGE" value="Добавил расчет корректируещих байтов для cksum" />
+    <MESSAGE value="Доработал посчет КС и вывод корректирующих байт в форму" />
+    <option name="LAST_COMMIT_MESSAGE" value="Доработал посчет КС и вывод корректирующих байт в форму" />
   </component>
   <component name="WindowStateProjectService">
     <state x="146" y="54" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1576772575335">
@@ -114,26 +112,26 @@
       <screen x="0" y="24" width="1366" height="744" />
     </state>
     <state x="431" y="252" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.24.1366.744@0.24.1366.744" timestamp="1576611782163" />
-    <state x="322" y="24" key="CommitChangelistDialog2" timestamp="1576772630990">
+    <state x="195" y="24" key="CommitChangelistDialog2" timestamp="1576997586374">
       <screen x="0" y="24" width="1366" height="744" />
     </state>
-    <state x="322" y="24" key="CommitChangelistDialog2/0.24.1366.744@0.24.1366.744" timestamp="1576772630990" />
-    <state width="1320" height="186" key="GridCell.Tab.0.bottom" timestamp="1576772582477">
+    <state x="195" y="24" key="CommitChangelistDialog2/0.24.1366.744@0.24.1366.744" timestamp="1576997586374" />
+    <state width="1320" height="186" key="GridCell.Tab.0.bottom" timestamp="1576997737820">
       <screen x="0" y="24" width="1366" height="744" />
     </state>
-    <state width="1320" height="186" key="GridCell.Tab.0.bottom/0.24.1366.744@0.24.1366.744" timestamp="1576772582477" />
-    <state width="1320" height="186" key="GridCell.Tab.0.center" timestamp="1576772582476">
+    <state width="1320" height="186" key="GridCell.Tab.0.bottom/0.24.1366.744@0.24.1366.744" timestamp="1576997737820" />
+    <state width="1320" height="186" key="GridCell.Tab.0.center" timestamp="1576997737819">
       <screen x="0" y="24" width="1366" height="744" />
     </state>
-    <state width="1320" height="186" key="GridCell.Tab.0.center/0.24.1366.744@0.24.1366.744" timestamp="1576772582476" />
-    <state width="1320" height="186" key="GridCell.Tab.0.left" timestamp="1576772582475">
+    <state width="1320" height="186" key="GridCell.Tab.0.center/0.24.1366.744@0.24.1366.744" timestamp="1576997737819" />
+    <state width="1320" height="186" key="GridCell.Tab.0.left" timestamp="1576997737818">
       <screen x="0" y="24" width="1366" height="744" />
     </state>
-    <state width="1320" height="186" key="GridCell.Tab.0.left/0.24.1366.744@0.24.1366.744" timestamp="1576772582475" />
-    <state width="1320" height="186" key="GridCell.Tab.0.right" timestamp="1576772582476">
+    <state width="1320" height="186" key="GridCell.Tab.0.left/0.24.1366.744@0.24.1366.744" timestamp="1576997737818" />
+    <state width="1320" height="186" key="GridCell.Tab.0.right" timestamp="1576997737819">
       <screen x="0" y="24" width="1366" height="744" />
     </state>
-    <state width="1320" height="186" key="GridCell.Tab.0.right/0.24.1366.744@0.24.1366.744" timestamp="1576772582476" />
+    <state width="1320" height="186" key="GridCell.Tab.0.right/0.24.1366.744@0.24.1366.744" timestamp="1576997737819" />
     <state width="1320" height="223" key="GridCell.Tab.1.bottom" timestamp="1576610980025">
       <screen x="0" y="24" width="1366" height="744" />
     </state>
@@ -154,10 +152,10 @@
       <screen x="0" y="24" width="1366" height="744" />
     </state>
     <state x="183" y="31" key="SettingsEditor/0.24.1366.744@0.24.1366.744" timestamp="1576094664433" />
-    <state x="557" y="193" key="UIDesigner.ListEditorDialog" timestamp="1576173063342">
+    <state x="557" y="193" key="UIDesigner.ListEditorDialog" timestamp="1576997565944">
       <screen x="0" y="24" width="1366" height="744" />
     </state>
-    <state x="557" y="193" key="UIDesigner.ListEditorDialog/0.24.1366.744@0.24.1366.744" timestamp="1576173063342" />
+    <state x="557" y="193" key="UIDesigner.ListEditorDialog/0.24.1366.744@0.24.1366.744" timestamp="1576997565944" />
     <state x="282" y="132" key="Vcs.Push.Dialog.v2" timestamp="1576611572032">
       <screen x="0" y="24" width="1366" height="744" />
     </state>
@@ -166,6 +164,10 @@
       <screen x="0" y="24" width="1366" height="744" />
     </state>
     <state x="368" y="224" key="com.intellij.ide.util.TipDialog/0.24.1366.744@0.24.1366.744" timestamp="1576307603723" />
+    <state x="479" y="316" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1576785619275">
+      <screen x="0" y="24" width="1366" height="744" />
+    </state>
+    <state x="479" y="316" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.24.1366.744@0.24.1366.744" timestamp="1576785619275" />
     <state x="444" y="141" key="com.intellij.uiDesigner.propertyInspector.editors.string.KeyChooserDialog" timestamp="1576099638992">
       <screen x="0" y="24" width="1366" height="744" />
     </state>

@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Timer;
@@ -30,6 +31,7 @@ public class RootWindow implements Observer {
     private JLabel lb_crc_hex;
     private JLabel lb_crc_oct;
     private JCheckBox chb_inject;
+    private JLabel lb_correcting_bytes;
     /** Выбранный файл */
     private File _selectedFile;
     /** Объект для рсчета cksum */
@@ -62,7 +64,7 @@ public class RootWindow implements Observer {
             tf_set_file.setText(_selectedFile.getName());
             if(cb_crc_type.getSelectedItem() == "CRC16") {
                 CRC16Calculate_v();
-            } else if (cb_crc_type.getSelectedItem() == "CRC32") {
+            } else if (cb_crc_type.getSelectedItem() == "CRC32-C") {
                 CRC32Calculate_v();
             } else if (cb_crc_type.getSelectedItem() == "CKSum") {
                 CKSumCalculate_v();
@@ -72,7 +74,7 @@ public class RootWindow implements Observer {
             if (_selectedFile.exists() && _selectedFile.canRead()) {
                 if(cb_crc_type.getSelectedItem() == "CRC16") {
                     CRC16Calculate_v();
-                } else if (cb_crc_type.getSelectedItem() == "CRC32") {
+                } else if (cb_crc_type.getSelectedItem() == "CRC32-C") {
                     CRC32Calculate_v();
                 } else if (cb_crc_type.getSelectedItem() == "CKSum") {
                     CKSumCalculate_v();
@@ -85,7 +87,7 @@ public class RootWindow implements Observer {
                     long parseLong = Long.parseLong(tf_crc_dec.getText());
                     if (cb_crc_type.getSelectedItem() == "CRC16") {
                         PostBytesCalcCRC16_v(parseLong);
-                    } else if (cb_crc_type.getSelectedItem() == "CRC32") {
+                    } else if (cb_crc_type.getSelectedItem() == "CRC32-C") {
                         PostBytesCalcCRC32_v(parseLong);
                     } else if (cb_crc_type.getSelectedItem() == "CKSum") {
                         PostBytesCalcCKSum_v(parseLong);
@@ -111,7 +113,6 @@ public class RootWindow implements Observer {
                 }, 200);
             }
         });
-
 
         tf_crc_hex.addKeyListener(new KeyAdapter() {
             @Override
@@ -145,9 +146,7 @@ public class RootWindow implements Observer {
             }
         });
 
-        chb_inject.addItemListener(e -> {
-            cb_file_type.setEnabled(e.getStateChange() == ItemEvent.SELECTED);
-        });
+        chb_inject.addItemListener(e -> cb_file_type.setEnabled(e.getStateChange() == ItemEvent.SELECTED));
 
         btn_cancel.addActionListener(e -> {
             _JCKSum_o.Abort_v();
@@ -188,6 +187,20 @@ public class RootWindow implements Observer {
      * @param parseLong Дребуемая КС
      */
     private void PostBytesCalcCKSum_v(long parseLong) {
+        if(chb_inject.isSelected()) {   // Если выбран, то проверяем на бинарный формат
+            FileInputStream fis;
+            try {
+                fis = new FileInputStream(_selectedFile);
+                byte[] bytes = new byte[4];
+                int c = fis.read(bytes, 0, 4);
+                if(c != -1 && bytes[0] == 0x7f && bytes[1] == 'E' && bytes[2] == 'L' && bytes[3] == 'F') {  // Это ELF файл
+
+                }
+                
+            } catch(IOException e) {
+                e.printStackTrace();
+            }
+        }
         _JCKSum_o.CalcPostBytes_v(parseLong);
     }
 
@@ -264,6 +277,6 @@ public class RootWindow implements Observer {
 
     @Override
     public void CheckCorrectingBytes_v(int Bytes_i) {
-        System.out.println("Check correcting bytes 0x" + Integer.toHexString(Bytes_i).toUpperCase());
+        lb_correcting_bytes.setText("0x" + Integer.toHexString(Bytes_i).toUpperCase());
     }
 }
