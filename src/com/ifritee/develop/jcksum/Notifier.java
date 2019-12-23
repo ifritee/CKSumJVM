@@ -6,11 +6,11 @@ public class Notifier {
     /** Реализация singleton Double checked locking & volatile */
     private static volatile Notifier instance;
     public static Notifier getInstance() {
-        Notifier LocalNotifier_o = instance;
-        if(LocalNotifier_o == null) {
+        Notifier localNotifier = instance;
+        if(localNotifier == null) {
             synchronized (Notifier.class) {
-                LocalNotifier_o = instance;
-                if(LocalNotifier_o == null) {
+                localNotifier = instance;
+                if(localNotifier == null) {
                     instance = new Notifier();
                 }
             }
@@ -18,40 +18,40 @@ public class Notifier {
         return instance;
     }
     /** Массив наблюдателей */
-    private ArrayList<Observer> _Observes_lst;
+    private ArrayList<Observer> observesList;
 
     /** Конструктор */
     Notifier() {
-        _Observes_lst = new ArrayList<>();
+        observesList = new ArrayList<>();
     }
 
     /**
      * Добавляет наблюдателя
-     * @param ob объект наблюдателя
+     * @param observer объект наблюдателя
      */
-    public void addObserver_v(Observer ob) {
-        if(!_Observes_lst.contains(ob)) {
-            _Observes_lst.add(ob);
+    public void addObserver(Observer observer) {
+        if(!observesList.contains(observer)) {
+            observesList.add(observer);
         }
     }
 
     /**
      * Удаляет наблюдателя из списка
-     * @param ob объект наблюдателя
+     * @param observer объект наблюдателя
      */
-    public void rmObserver_v(Observer ob) {
-        if(_Observes_lst.contains(ob)) {
-            _Observes_lst.remove(ob);
+    public void rmObserver_v(Observer observer) {
+        if(observesList.contains(observer)) {
+            observesList.remove(observer);
         }
     }
 
     /**
      * Отправка сообщения на всех слушателей
-     * @param Bytes_i Корректирующие байты
+     * @param bytes Корректирующие байты
      */
-    public void sendCorrectingBytes_pv(int Bytes_i) {
-        for(Observer observer : _Observes_lst) {
-            observer.CheckCorrectingBytes_v(Bytes_i);
+    public void sendCorrectingBytes(int bytes) {
+        for(Observer observer : observesList) {
+            observer.checkCorrectingBytes(bytes);
         }
     }
 }

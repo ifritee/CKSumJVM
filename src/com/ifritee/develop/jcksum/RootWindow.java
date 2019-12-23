@@ -32,67 +32,67 @@ public class RootWindow implements Observer {
     private JCheckBox chb_inject;
     private JLabel lb_correcting_bytes;
     /** Выбранный файл */
-    private File _selectedFile;
+    private File selectedFile;
     /** Объект для рсчета контрольной суммы */
-    private JCKSum _JCKSum_o;
+    private JCKSum jckSum;
     /** Объект для рсчета CRC-16 */
-    private JCRC16 _JCRC16_o;
+    private JCRC16 jcrc16;
     /** Словарь делителей */
-    HashMap<JTextField, Integer> _RadixDict_map;
+    HashMap<JTextField, Integer> radixDict;
     /** Логер */
-    public static final Logger logger = Logger.getLogger(RootWindow.class.getName());
+    public static final Logger LOGGER = Logger.getLogger(RootWindow.class.getName());
 
     /** Конструктор */
     public RootWindow() {
-        Notifier.getInstance().addObserver_v(this);
-        _selectedFile = new File("");
-        _JCKSum_o = new JCKSum();
-        _JCRC16_o = new JCRC16();
-        _RadixDict_map = new HashMap<>();
-        _RadixDict_map.put(tf_crc_dec, 10);
-        _RadixDict_map.put(tf_crc_hex, 16);
-        _RadixDict_map.put(tf_crc_oct, 8);
+        Notifier.getInstance().addObserver(this);
+        selectedFile = new File("");
+        jckSum = new JCKSum();
+        jcrc16 = new JCRC16();
+        radixDict = new HashMap<>();
+        radixDict.put(tf_crc_dec, 10);
+        radixDict.put(tf_crc_hex, 16);
+        radixDict.put(tf_crc_oct, 8);
         btn_choose_file.addActionListener(e -> { // Действия при выборе файла
             JFileChooser fileChooser = new JFileChooser();
-            eraseData_v();
+            eraseData();
             btn_calculate.setEnabled(false);
             int ReturnCode_i = fileChooser.showOpenDialog(rootPanel);
             if (ReturnCode_i == JFileChooser.APPROVE_OPTION) {
-                _selectedFile = fileChooser.getSelectedFile();
+                selectedFile = fileChooser.getSelectedFile();
             }
-            tf_set_file.setText(_selectedFile.getName());
-            if(cb_crc_type.getSelectedItem() == "CRC16") {
-                CRC16Calculate_v();
-            } else if (cb_crc_type.getSelectedItem() == "CRC32-C") {
-                CRC32Calculate_v();
-            } else if (cb_crc_type.getSelectedItem() == "CKSum") {
-                CKSumCalculate_v();
+            tf_set_file.setText(selectedFile.getName());
+            if(("CRC16").equals(cb_crc_type.getSelectedItem())) {
+                calculateCRC16();
+            } else if (("CRC32-C").equals(cb_crc_type.getSelectedItem())) {
+                calculateCRC32();
+            } else if (("CKSum").equals(cb_crc_type.getSelectedItem())) {
+                calculateCKSum();
             }
         });
         cb_crc_type.addActionListener(e -> { // Действия при выборе типа КС
-            if (_selectedFile.exists() && _selectedFile.canRead()) {
-                if(cb_crc_type.getSelectedItem() == "CRC16") {
-                    CRC16Calculate_v();
-                } else if (cb_crc_type.getSelectedItem() == "CRC32-C") {
-                    CRC32Calculate_v();
-                } else if (cb_crc_type.getSelectedItem() == "CKSum") {
-                    CKSumCalculate_v();
+            if (selectedFile.exists() && selectedFile.canRead()) {
+                if(("CRC16").equals(cb_crc_type.getSelectedItem())) {
+                    calculateCRC16();
+                } else if (("CRC32-C").equals(cb_crc_type.getSelectedItem())) {
+                    calculateCRC32();
+                } else if (("CKSum").equals(cb_crc_type.getSelectedItem())) {
+                    calculateCKSum();
                 }
             }
         });
         btn_calculate.addActionListener(e -> {  // Действия при расчете
-            if (_selectedFile.exists() && _selectedFile.canRead()) {
+            if (selectedFile.exists() && selectedFile.canRead()) {
                 try {
                     long parseLong = Long.parseLong(tf_crc_dec.getText());
-                    if (cb_crc_type.getSelectedItem() == "CRC16") {
-                        PostBytesCalcCRC16_v(parseLong);
-                    } else if (cb_crc_type.getSelectedItem() == "CRC32-C") {
-                        PostBytesCalcCRC32_v(parseLong);
-                    } else if (cb_crc_type.getSelectedItem() == "CKSum") {
-                        PostBytesCalcCKSum_v(parseLong);
+                    if (("CRC16").equals(cb_crc_type.getSelectedItem())) {
+                        postBytesCalcCRC16(parseLong);
+                    } else if (("CRC32-C").equals(cb_crc_type.getSelectedItem())) {
+                        postBytesCalcCRC32(parseLong);
+                    } else if (("CKSum").equals(cb_crc_type.getSelectedItem())) {
+                        postBytesCalcCKSum(parseLong);
                     }
                 } catch (NumberFormatException ex) {
-                    logger.log(Level.SEVERE, "Пустая строка с желаемой КС ", e);
+                    LOGGER.log(Level.SEVERE, "Пустая строка с желаемой КС ", e);
                 }
             }
         });
@@ -104,9 +104,9 @@ public class RootWindow implements Observer {
                 new Timer().schedule(new TimerTask() {
                     @Override
                     public void run() {
-                        long Value_i = Long.parseLong(tf_crc_dec.getText().length() == 0 ? "0" : tf_crc_dec.getText(), _RadixDict_map.get(tf_crc_dec));
-                        tf_crc_hex.setText(Long.toHexString(Value_i));
-                        tf_crc_oct.setText(Long.toOctalString(Value_i));
+                        long value = Long.parseLong(tf_crc_dec.getText().length() == 0 ? "0" : tf_crc_dec.getText(), radixDict.get(tf_crc_dec));
+                        tf_crc_hex.setText(Long.toHexString(value));
+                        tf_crc_oct.setText(Long.toOctalString(value));
                         btn_calculate.setEnabled(tf_crc_dec.getText().length() > 0);
                     }
                 }, 200);
@@ -120,9 +120,9 @@ public class RootWindow implements Observer {
                 new Timer().schedule(new TimerTask() {
                     @Override
                     public void run() {
-                        long Value_i = Long.parseLong(tf_crc_hex.getText().length() == 0 ? "0" : tf_crc_hex.getText(), _RadixDict_map.get(tf_crc_hex));
-                        tf_crc_dec.setText(Long.toString(Value_i));
-                        tf_crc_oct.setText(Long.toOctalString(Value_i));
+                        long value = Long.parseLong(tf_crc_hex.getText().length() == 0 ? "0" : tf_crc_hex.getText(), radixDict.get(tf_crc_hex));
+                        tf_crc_dec.setText(Long.toString(value));
+                        tf_crc_oct.setText(Long.toOctalString(value));
                         btn_calculate.setEnabled(tf_crc_hex.getText().length() > 0);
                     }
                 }, 200);
@@ -136,9 +136,9 @@ public class RootWindow implements Observer {
                 new Timer().schedule(new TimerTask() {
                     @Override
                     public void run() {
-                        long Value_i = Long.parseLong(tf_crc_oct.getText().length() == 0 ? "0" : tf_crc_oct.getText(), _RadixDict_map.get(tf_crc_oct));
-                        tf_crc_hex.setText(Long.toHexString(Value_i));
-                        tf_crc_dec.setText(Long.toString(Value_i));
+                        long value = Long.parseLong(tf_crc_oct.getText().length() == 0 ? "0" : tf_crc_oct.getText(), radixDict.get(tf_crc_oct));
+                        tf_crc_hex.setText(Long.toHexString(value));
+                        tf_crc_dec.setText(Long.toString(value));
                         btn_calculate.setEnabled(tf_crc_oct.getText().length() > 0);
                     }
                 }, 200);
@@ -148,12 +148,12 @@ public class RootWindow implements Observer {
         chb_inject.addItemListener(e -> cb_file_type.setEnabled(e.getStateChange() == ItemEvent.SELECTED));
 
         btn_cancel.addActionListener(e -> {
-            _JCKSum_o.Abort_v();
-            _JCRC16_o.Abort_v();
+            jckSum.abort();
+            jcrc16.abort();
         });
     }
 
-    private void eraseData_v() {
+    private void eraseData() {
         tf_set_file.setText("");
         tf_crc_dec.setText("");
         tf_crc_hex.setText("");
@@ -167,7 +167,7 @@ public class RootWindow implements Observer {
      * Запуск расчета доп. 4-х байт данных
      * @param parseLong Дребуемая КС
      */
-    private void PostBytesCalcCRC32_v(long parseLong) {
+    private void postBytesCalcCRC32(long parseLong) {
 
     }
 
@@ -175,9 +175,9 @@ public class RootWindow implements Observer {
      * Запуск расчета доп. 2-х байт данных
      * @param parseLong Дребуемая КС
      */
-    private void PostBytesCalcCRC16_v(long parseLong) {
+    private void postBytesCalcCRC16(long parseLong) {
         if(parseLong >= 0 && parseLong <= 65535) {
-            _JCRC16_o.CalcPostBytes_v((int) parseLong);
+            jcrc16.calcPostBytes((int) parseLong);
         }
     }
 
@@ -185,22 +185,29 @@ public class RootWindow implements Observer {
      * Запуск расчета доп. 4-х байт данных
      * @param parseLong Дребуемая КС
      */
-    private void PostBytesCalcCKSum_v(long parseLong) {
+    private void postBytesCalcCKSum(long parseLong) {
         if(chb_inject.isSelected()) {   // Если выбран, то проверяем на бинарный формат
-            FileInputStream fis;
+            FileInputStream fileInputStream = null;
             try {
-                fis = new FileInputStream(_selectedFile);
+                fileInputStream = new FileInputStream(selectedFile);
                 byte[] bytes = new byte[4];
-                int c = fis.read(bytes, 0, 4);
+                int c = fileInputStream.read(bytes, 0, 4);
                 if(c != -1 && bytes[0] == 0x7f && bytes[1] == 'E' && bytes[2] == 'L' && bytes[3] == 'F') {  // Это ELF файл
 
                 }
-                
             } catch(IOException e) {
                 e.printStackTrace();
+            } finally {
+                if(fileInputStream != null) {
+                    try {
+                        fileInputStream.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         }
-        _JCKSum_o.CalcPostBytes_v(parseLong);
+        jckSum.calcPostBytes(parseLong);
     }
 
     public JPanel getRootPanel() {
@@ -208,74 +215,102 @@ public class RootWindow implements Observer {
     }
 
     /** Подсчет КС по алгоритму CRC32 */
-    private void CRC32Calculate_v() {
+    private void calculateCRC32() {
+        FileInputStream fileInputStream = null;
         try {
-            logger.info("Запуск подсчета CRC32 для файла " + _selectedFile);
-            CRC32 CRC32_o = new CRC32();
-            FileInputStream fis = new FileInputStream(_selectedFile);
+            LOGGER.info("Запуск подсчета CRC32 для файла " + selectedFile);
+            CRC32 crc32 = new CRC32();
+            fileInputStream = new FileInputStream(selectedFile);
             int c;
-            while ((c = fis.read()) != -1) {
-                CRC32_o.update(c);
+            while ((c = fileInputStream.read()) != -1) {
+                crc32.update(c);
             }
-            lb_crc_dec.setText("DEC: " + CRC32_o.getValue());
-            lb_crc_hex.setText("HEX: " + Long.toHexString(CRC32_o.getValue()).toUpperCase());
-            lb_crc_oct.setText("OCT: " + Long.toOctalString(CRC32_o.getValue()));
+            fileInputStream.close();
+            lb_crc_dec.setText("DEC: " + crc32.getValue());
+            lb_crc_hex.setText("HEX: " + Long.toHexString(crc32.getValue()).toUpperCase());
+            lb_crc_oct.setText("OCT: " + Long.toOctalString(crc32.getValue()));
         } catch (IOException e) {
-            logger.log(Level.SEVERE, "Не удалось обработать файл " + _selectedFile, e);
+            LOGGER.log(Level.SEVERE, "Не удалось обработать файл " + selectedFile, e);
         } catch (NullPointerException e) {
-            logger.log(Level.SEVERE, "Не удалось посчитать CRC16 файла " + _selectedFile, e);
+            LOGGER.log(Level.SEVERE, "Не удалось посчитать CRC16 файла " + selectedFile, e);
         } catch (ArrayIndexOutOfBoundsException e) {
-            logger.log(Level.SEVERE, "Выход за границы массива ", e);
+            LOGGER.log(Level.SEVERE, "Выход за границы массива ", e);
+        } finally {
+            if(fileInputStream != null) {
+                try {
+                    fileInputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
     /** Подсчет КС по алгоритму CRC32 */
-    private void CRC16Calculate_v() {
+    private void calculateCRC16() {
+        FileInputStream fileInputStream = null;
         try {
-            logger.info("Запуск подсчета CRC16 для файла " + _selectedFile);
-            _JCRC16_o.reset();
-            FileInputStream fis = new FileInputStream(_selectedFile);
+            LOGGER.info("Запуск подсчета CRC16 для файла " + selectedFile);
+            jcrc16.reset();
+            fileInputStream = new FileInputStream(selectedFile);
             int c;
-            while ((c = fis.read()) != -1) {
-                _JCRC16_o.update((byte) c);
+            while ((c = fileInputStream.read()) != -1) {
+                jcrc16.update((byte) c);
             }
-            lb_crc_dec.setText("DEC: " + _JCRC16_o.value);
-            lb_crc_hex.setText("HEX: " + Long.toHexString(_JCRC16_o.value).toUpperCase());
-            lb_crc_oct.setText("OCT: " + Long.toOctalString(_JCRC16_o.value));
+            lb_crc_dec.setText("DEC: " + jcrc16.value);
+            lb_crc_hex.setText("HEX: " + Long.toHexString(jcrc16.value).toUpperCase());
+            lb_crc_oct.setText("OCT: " + Long.toOctalString(jcrc16.value));
         } catch (IOException e) {
-            logger.log(Level.SEVERE, "Не удалось обработать файл " + _selectedFile, e);
+            LOGGER.log(Level.SEVERE, "Не удалось обработать файл " + selectedFile, e);
         } catch (NullPointerException e) {
-            logger.log(Level.SEVERE, "Не удалось посчитать CRC16 файла " + _selectedFile, e);
+            LOGGER.log(Level.SEVERE, "Не удалось посчитать CRC16 файла " + selectedFile, e);
         } catch (ArrayIndexOutOfBoundsException e) {
-            logger.log(Level.SEVERE, "Выход за границы массива ", e);
+            LOGGER.log(Level.SEVERE, "Выход за границы массива ", e);
+        } finally {
+            if(fileInputStream != null) {
+                try {
+                    fileInputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
     /** Подсчет КС по алгоритму CKSum */
-    private void CKSumCalculate_v() {
+    private void calculateCKSum() {
+        FileInputStream fileInputStream = null;
         try {
-            logger.info("Запуск подсчета CKSum для файла " + _selectedFile);
-            _JCKSum_o.erase_v();
-            FileInputStream fis = new FileInputStream(_selectedFile);
+            LOGGER.info("Запуск подсчета CKSum для файла " + selectedFile);
+            jckSum.erase();
+            fileInputStream = new FileInputStream(selectedFile);
             int c;
-            while ((c = fis.read()) != -1) {
-                _JCKSum_o.addByte_v(c);
+            while ((c = fileInputStream.read()) != -1) {
+                jckSum.addByte(c);
             }
-            int Value_i = _JCKSum_o.getValue_i();
-            lb_crc_dec.setText("DEC: " + Value_i);
-            lb_crc_hex.setText("HEX: " + Integer.toHexString(Value_i).toUpperCase());
-            lb_crc_oct.setText("OCT: " + Integer.toOctalString(Value_i));
+            int value = jckSum.getValue();
+            lb_crc_dec.setText("DEC: " + value);
+            lb_crc_hex.setText("HEX: " + Integer.toHexString(value).toUpperCase());
+            lb_crc_oct.setText("OCT: " + Integer.toOctalString(value));
         } catch (IOException e) {
-            logger.log(Level.SEVERE, "Не удалось обработать файл " + _selectedFile, e);
+            LOGGER.log(Level.SEVERE, "Не удалось обработать файл " + selectedFile, e);
         } catch (NullPointerException e) {
-            logger.log(Level.SEVERE, "Не удалось посчитать CRC16 файла " + _selectedFile, e);
+            LOGGER.log(Level.SEVERE, "Не удалось посчитать CRC16 файла " + selectedFile, e);
         } catch (ArrayIndexOutOfBoundsException e) {
-            logger.log(Level.SEVERE, "Выход за границы массива ", e);
+            LOGGER.log(Level.SEVERE, "Выход за границы массива ", e);
+        } finally {
+            if(fileInputStream != null) {
+                try {
+                    fileInputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
     @Override
-    public void CheckCorrectingBytes_v(int Bytes_i) {
-        lb_correcting_bytes.setText("0x" + Integer.toHexString(Bytes_i).toUpperCase());
+    public void checkCorrectingBytes(int bytes) {
+        lb_correcting_bytes.setText("0x" + Integer.toHexString(bytes).toUpperCase());
     }
 }

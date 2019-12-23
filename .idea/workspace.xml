@@ -3,12 +3,11 @@
   <component name="ChangeListManager">
     <list default="true" id="9814fe05-0721-4b85-83d7-25fc8b49c97b" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RootWindow.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/RootWindow.form" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/ifritee/develop/jcksum/JCKSum.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/ifritee/develop/jcksum/JCKSum.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/ifritee/develop/jcksum/JCRC16.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/ifritee/develop/jcksum/JCRC16.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/ifritee/develop/jcksum/Notifier.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/ifritee/develop/jcksum/Notifier.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/ifritee/develop/jcksum/Observer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/ifritee/develop/jcksum/Observer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/ifritee/develop/jcksum/RootWindow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/ifritee/develop/jcksum/RootWindow.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/strings.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/strings.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/strings_ru.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/strings_ru.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -102,14 +101,22 @@
       <option name="project" value="LOCAL" />
       <updated>1576998482485</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Поправил warning'и">
+      <created>1577000605130</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1577000605130</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Добавил логирование действий" />
     <MESSAGE value="Добавил расчет корректируещих байтов для cksum" />
     <MESSAGE value="Доработал посчет КС и вывод корректирующих байт в форму" />
-    <option name="LAST_COMMIT_MESSAGE" value="Доработал посчет КС и вывод корректирующих байт в форму" />
+    <MESSAGE value="Поправил warning'и" />
+    <option name="LAST_COMMIT_MESSAGE" value="Поправил warning'и" />
   </component>
   <component name="WindowStateProjectService">
     <state x="146" y="54" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1576772575335">
@@ -124,6 +131,10 @@
       <screen x="0" y="24" width="1366" height="744" />
     </state>
     <state x="420" y="188" key="#com.intellij.ide.util.TreeFileChooserDialog/0.24.1366.744@0.24.1366.744" timestamp="1576098279087" />
+    <state x="203" y="24" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1577122164148">
+      <screen x="0" y="24" width="1366" height="744" />
+    </state>
+    <state x="203" y="24" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.24.1366.744@0.24.1366.744" timestamp="1577122164148" />
     <state x="420" y="145" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog" timestamp="1577000369177">
       <screen x="0" y="24" width="1366" height="744" />
     </state>
@@ -132,26 +143,26 @@
       <screen x="0" y="24" width="1366" height="744" />
     </state>
     <state x="431" y="252" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.24.1366.744@0.24.1366.744" timestamp="1577000474730" />
-    <state x="195" y="24" key="CommitChangelistDialog2" timestamp="1576998482344">
+    <state x="195" y="24" key="CommitChangelistDialog2" timestamp="1577000605020">
       <screen x="0" y="24" width="1366" height="744" />
     </state>
-    <state x="195" y="24" key="CommitChangelistDialog2/0.24.1366.744@0.24.1366.744" timestamp="1576998482344" />
-    <state width="1320" height="186" key="GridCell.Tab.0.bottom" timestamp="1577000429153">
+    <state x="195" y="24" key="CommitChangelistDialog2/0.24.1366.744@0.24.1366.744" timestamp="1577000605020" />
+    <state width="1320" height="186" key="GridCell.Tab.0.bottom" timestamp="1577123447631">
       <screen x="0" y="24" width="1366" height="744" />
     </state>
-    <state width="1320" height="186" key="GridCell.Tab.0.bottom/0.24.1366.744@0.24.1366.744" timestamp="1577000429153" />
-    <state width="1320" height="186" key="GridCell.Tab.0.center" timestamp="1577000429152">
+    <state width="1320" height="186" key="GridCell.Tab.0.bottom/0.24.1366.744@0.24.1366.744" timestamp="1577123447631" />
+    <state width="1320" height="186" key="GridCell.Tab.0.center" timestamp="1577123447630">
       <screen x="0" y="24" width="1366" height="744" />
     </state>
-    <state width="1320" height="186" key="GridCell.Tab.0.center/0.24.1366.744@0.24.1366.744" timestamp="1577000429152" />
-    <state width="1320" height="186" key="GridCell.Tab.0.left" timestamp="1577000429152">
+    <state width="1320" height="186" key="GridCell.Tab.0.center/0.24.1366.744@0.24.1366.744" timestamp="1577123447630" />
+    <state width="1320" height="186" key="GridCell.Tab.0.left" timestamp="1577123447629">
       <screen x="0" y="24" width="1366" height="744" />
     </state>
-    <state width="1320" height="186" key="GridCell.Tab.0.left/0.24.1366.744@0.24.1366.744" timestamp="1577000429152" />
-    <state width="1320" height="186" key="GridCell.Tab.0.right" timestamp="1577000429152">
+    <state width="1320" height="186" key="GridCell.Tab.0.left/0.24.1366.744@0.24.1366.744" timestamp="1577123447629" />
+    <state width="1320" height="186" key="GridCell.Tab.0.right" timestamp="1577123447630">
       <screen x="0" y="24" width="1366" height="744" />
     </state>
-    <state width="1320" height="186" key="GridCell.Tab.0.right/0.24.1366.744@0.24.1366.744" timestamp="1577000429152" />
+    <state width="1320" height="186" key="GridCell.Tab.0.right/0.24.1366.744@0.24.1366.744" timestamp="1577123447630" />
     <state width="1320" height="223" key="GridCell.Tab.1.bottom" timestamp="1576610980025">
       <screen x="0" y="24" width="1366" height="744" />
     </state>
@@ -176,10 +187,10 @@
       <screen x="0" y="24" width="1366" height="744" />
     </state>
     <state x="557" y="193" key="UIDesigner.ListEditorDialog/0.24.1366.744@0.24.1366.744" timestamp="1577000254543" />
-    <state x="282" y="132" key="Vcs.Push.Dialog.v2" timestamp="1576611572032">
+    <state x="282" y="132" key="Vcs.Push.Dialog.v2" timestamp="1577000608728">
       <screen x="0" y="24" width="1366" height="744" />
     </state>
-    <state x="282" y="132" key="Vcs.Push.Dialog.v2/0.24.1366.744@0.24.1366.744" timestamp="1576611572032" />
+    <state x="282" y="132" key="Vcs.Push.Dialog.v2/0.24.1366.744@0.24.1366.744" timestamp="1577000608728" />
     <state x="368" y="224" key="com.intellij.ide.util.TipDialog" timestamp="1576307603723">
       <screen x="0" y="24" width="1366" height="744" />
     </state>
@@ -200,5 +211,9 @@
       <screen x="0" y="24" width="1366" height="744" />
     </state>
     <state x="441" y="280" key="com.intellij.uiDesigner.propertyInspector.editors.string.StringEditorDialog/0.24.1366.744@0.24.1366.744" timestamp="1576998839018" />
+    <state x="99" y="120" width="1168" height="549" key="dock-window-1" timestamp="1577122382995">
+      <screen x="0" y="24" width="1366" height="744" />
+    </state>
+    <state x="99" y="120" width="1168" height="549" key="dock-window-1/0.24.1366.744@0.24.1366.744" timestamp="1577122382995" />
   </component>
 </project>

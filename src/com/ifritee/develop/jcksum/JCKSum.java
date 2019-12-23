@@ -10,17 +10,17 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class JCKSum {
     /** Массив индексов */
-    private final int[] CRCTabIndexes_ai;
+    private final int[] CRCTABINDEXES;
     /** Промежуточное значение */
-    private int _TempleValue_i;
+    private int templeValueI;
     /** Размер добавленных данных */
-    private long _Size_l;
+    private long sizeL;
     /** Состояние работы для потоков */
-    private AtomicBoolean _ThreadRunFlag_ab;
+    private AtomicBoolean threadRunFlagB;
 
     /** Конструктор */
     public JCKSum() {
-        CRCTabIndexes_ai = new int[] {
+        CRCTABINDEXES = new int[] {
                 0x00000000,
                 0x04c11db7, 0x09823b6e, 0x0d4326d9, 0x130476dc, 0x17c56b6b,
                 0x1a864db2, 0x1e475005, 0x2608edb8, 0x22c9f00f, 0x2f8ad6d6,
@@ -74,64 +74,64 @@ public class JCKSum {
                 0x933eb0bb, 0x97ffad0c, 0xafb010b1, 0xab710d06, 0xa6322bdf,
                 0xa2f33668, 0xbcb4666d, 0xb8757bda, 0xb5365d03, 0xb1f740b4
         };
-        _ThreadRunFlag_ab = new AtomicBoolean();
-        erase_v();
+        threadRunFlagB = new AtomicBoolean();
+        erase();
     }
 
     /**
      * Добавляет очередной байт данных для расчета КС
      * @param Data_ab Очередной байт данных
      */
-    public void addByte_v(int Data_ab) {
-        ++_Size_l;
-        _TempleValue_i = (_TempleValue_i << 8) ^ CRCTabIndexes_ai[(_TempleValue_i >>> 24) ^ Data_ab];
+    public void addByte(int Data_ab) {
+        ++sizeL;
+        templeValueI = (templeValueI << 8) ^ CRCTABINDEXES[(templeValueI >>> 24) ^ Data_ab];
     }
 
     /**
      * Очищает временные данные
      */
-    public void erase_v() {
-        _Size_l = 0;
-        _TempleValue_i = 0;
+    public void erase() {
+        sizeL = 0;
+        templeValueI = 0;
     }
 
-    public void Abort_v() {
-        _ThreadRunFlag_ab.set(true);
+    public void abort() {
+        threadRunFlagB.set(true);
     }
 
     /**
      * Дорасчитывает КС м выдает результат
      * @return Расчетная КС
      */
-    public int getValue_i() {
-        return getValue_i(_TempleValue_i, _Size_l);
+    public int getValue() {
+        return getValue(templeValueI, sizeL);
     }
 
     /**
      * Расчет дополтельный 4-х байт
      * @param FinalCRC_l Желаемая КС
      */
-    public void CalcPostBytes_v(long FinalCRC_l) {
+    public void calcPostBytes(long FinalCRC_l) {
         final int CPUCount_i = Runtime.getRuntime().availableProcessors();
         final int Pie_i = (Integer.MAX_VALUE / CPUCount_i) * 2;
-        final long TempSize_l = _Size_l + 4;
-        final int TempValue_i = _TempleValue_i;
-        _ThreadRunFlag_ab.set(false);
+        final long TempSize_l = sizeL + 4;
+        final int TempValue_i = templeValueI;
+        threadRunFlagB.set(false);
         for (int i = 0; i < CPUCount_i; ++i) {  // Пробежимся по всем допустимым потокам для вычисления дополнительных 4-х байт
             final int StartNumber_i = Integer.MIN_VALUE + Pie_i * i;
             final int StopNumber_i = (i == (CPUCount_i - 1)) ? Integer.MAX_VALUE : Integer.MIN_VALUE + Pie_i * (i + 1);
             int finalI = i;
             Runnable runnable_o = () -> {
                 System.out.println("START thread N" + finalI + " [ " + StartNumber_i + ", " + StopNumber_i + " ] ");
-                for (int j = StartNumber_i; (j <= StopNumber_i) && (!_ThreadRunFlag_ab.get()); ++j) {
+                for (int j = StartNumber_i; (j <= StopNumber_i) && (!threadRunFlagB.get()); ++j) {
                     int val = TempValue_i;
                     byte[] bytes = ByteBuffer.allocate(4).putInt(j).array();
                     for (byte Byte_c : bytes) {
-                        val = (val << 8) ^ CRCTabIndexes_ai[(val >>> 24) ^ (Byte_c & 0xFF)];
+                        val = (val << 8) ^ CRCTABINDEXES[(val >>> 24) ^ (Byte_c & 0xFF)];
                     }
-                    if (FinalCRC_l == getValue_i(val, TempSize_l)) {
-                        Notifier.getInstance().sendCorrectingBytes_pv(j);
-                        _ThreadRunFlag_ab.set(true);
+                    if (FinalCRC_l == getValue(val, TempSize_l)) {
+                        Notifier.getInstance().sendCorrectingBytes(j);
+                        threadRunFlagB.set(true);
                     }
                 }
                 System.out.println("STOP " + finalI);
@@ -144,14 +144,14 @@ public class JCKSum {
      * Дорасчитывает КС м выдает результат
      * @return Расчетная КС
      */
-    private int getValue_i(int TempValue_i, long Size_l) {
+    private int getValue(int TempValue_i, long Size_l) {
         int TempSize_l = (int)Size_l;
         int Value_i = TempValue_i;
         int c;
         while (TempSize_l != 0) {
             c = TempSize_l & 255;
             TempSize_l >>= 8;
-            Value_i = (Value_i << 8) ^ CRCTabIndexes_ai[(Value_i >>> 24) ^ c];
+            Value_i = (Value_i << 8) ^ CRCTABINDEXES[(Value_i >>> 24) ^ c];
         }
         return ~Value_i;
     }

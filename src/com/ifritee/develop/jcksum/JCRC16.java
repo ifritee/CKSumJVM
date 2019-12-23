@@ -6,10 +6,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class JCRC16 {
     public int value = 0;
     /** Состояние работы для потоков */
-    private AtomicBoolean _ThreadRunFlag_ab;
+    private AtomicBoolean threadRunFlagB;
 
     public JCRC16() {
-        _ThreadRunFlag_ab = new AtomicBoolean();
+        threadRunFlagB = new AtomicBoolean();
         reset();
     }
 
@@ -32,30 +32,30 @@ public class JCRC16 {
      * Расчет дополтельный 2-х байт
      * @param FinalCRC_i Желаемая КС
      */
-    public void CalcPostBytes_v(int FinalCRC_i) {
+    public void calcPostBytes(int FinalCRC_i) {
         Runnable runnable_o = () -> {
-            for (short i = -32768; (i < 32767) && (!_ThreadRunFlag_ab.get()); ++i) {
+            for (short i = -32768; (i < 32767) && (!threadRunFlagB.get()); ++i) {
                 int tempValue_i = this.value;
                 byte[] bytes = ByteBuffer.allocate(2).putShort(i).array();
                 update(bytes[0]);
                 update(bytes[1]);
                 if (value == FinalCRC_i) {
-                    Notifier.getInstance().sendCorrectingBytes_pv(i);
-                    _ThreadRunFlag_ab.set(true);
+                    Notifier.getInstance().sendCorrectingBytes(i);
+                    threadRunFlagB.set(true);
                 }
                 value = tempValue_i;
             }
-            _ThreadRunFlag_ab.set(false);
+            threadRunFlagB.set(false);
         };
         (new Thread(runnable_o)).start();
     }
 
     public void reset() {
         this.value = 0;
-        _ThreadRunFlag_ab.set(false);
+        threadRunFlagB.set(false);
     }
 
-    public void Abort_v() {
-        _ThreadRunFlag_ab.set(true);
+    public void abort() {
+        threadRunFlagB.set(true);
     }
 }
