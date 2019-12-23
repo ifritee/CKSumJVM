@@ -16,7 +16,7 @@ public class JCKSum {
     /** Размер добавленных данных */
     private long sizeL;
     /** Состояние работы для потоков */
-    private AtomicBoolean threadRunFlagB;
+    final private AtomicBoolean THREADRUNFLAG;
 
     /** Конструктор */
     public JCKSum() {
@@ -74,7 +74,7 @@ public class JCKSum {
                 0x933eb0bb, 0x97ffad0c, 0xafb010b1, 0xab710d06, 0xa6322bdf,
                 0xa2f33668, 0xbcb4666d, 0xb8757bda, 0xb5365d03, 0xb1f740b4
         };
-        threadRunFlagB = new AtomicBoolean();
+        THREADRUNFLAG = new AtomicBoolean();
         erase();
     }
 
@@ -96,7 +96,7 @@ public class JCKSum {
     }
 
     public void abort() {
-        threadRunFlagB.set(true);
+        THREADRUNFLAG.set(true);
     }
 
     /**
@@ -116,14 +116,14 @@ public class JCKSum {
         final int Pie_i = (Integer.MAX_VALUE / CPUCount_i) * 2;
         final long TempSize_l = sizeL + 4;
         final int TempValue_i = templeValueI;
-        threadRunFlagB.set(false);
+        THREADRUNFLAG.set(false);
         for (int i = 0; i < CPUCount_i; ++i) {  // Пробежимся по всем допустимым потокам для вычисления дополнительных 4-х байт
             final int StartNumber_i = Integer.MIN_VALUE + Pie_i * i;
             final int StopNumber_i = (i == (CPUCount_i - 1)) ? Integer.MAX_VALUE : Integer.MIN_VALUE + Pie_i * (i + 1);
             int finalI = i;
             Runnable runnable_o = () -> {
                 System.out.println("START thread N" + finalI + " [ " + StartNumber_i + ", " + StopNumber_i + " ] ");
-                for (int j = StartNumber_i; (j <= StopNumber_i) && (!threadRunFlagB.get()); ++j) {
+                for (int j = StartNumber_i; (j <= StopNumber_i) && (!THREADRUNFLAG.get()); ++j) {
                     int val = TempValue_i;
                     byte[] bytes = ByteBuffer.allocate(4).putInt(j).array();
                     for (byte Byte_c : bytes) {
@@ -131,7 +131,7 @@ public class JCKSum {
                     }
                     if (FinalCRC_l == getValue(val, TempSize_l)) {
                         Notifier.getInstance().sendCorrectingBytes(j);
-                        threadRunFlagB.set(true);
+                        THREADRUNFLAG.set(true);
                     }
                 }
                 System.out.println("STOP " + finalI);

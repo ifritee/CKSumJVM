@@ -18,11 +18,11 @@ public class Notifier {
         return instance;
     }
     /** Массив наблюдателей */
-    private ArrayList<Observer> observesList;
+    final private ArrayList<Observer> OBSERVES;
 
     /** Конструктор */
     Notifier() {
-        observesList = new ArrayList<>();
+        OBSERVES = new ArrayList<>();
     }
 
     /**
@@ -30,8 +30,8 @@ public class Notifier {
      * @param observer объект наблюдателя
      */
     public void addObserver(Observer observer) {
-        if(!observesList.contains(observer)) {
-            observesList.add(observer);
+        if(!OBSERVES.contains(observer)) {
+            OBSERVES.add(observer);
         }
     }
 
@@ -39,10 +39,8 @@ public class Notifier {
      * Удаляет наблюдателя из списка
      * @param observer объект наблюдателя
      */
-    public void rmObserver_v(Observer observer) {
-        if(observesList.contains(observer)) {
-            observesList.remove(observer);
-        }
+    public void removeObserver(Observer observer) {
+        OBSERVES.remove(observer);
     }
 
     /**
@@ -50,7 +48,7 @@ public class Notifier {
      * @param bytes Корректирующие байты
      */
     public void sendCorrectingBytes(int bytes) {
-        for(Observer observer : observesList) {
+        for(Observer observer : OBSERVES) {
             observer.checkCorrectingBytes(bytes);
         }
     }

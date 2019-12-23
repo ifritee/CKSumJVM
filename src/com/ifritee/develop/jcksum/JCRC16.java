@@ -6,10 +6,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class JCRC16 {
     public int value = 0;
     /** Состояние работы для потоков */
-    private AtomicBoolean threadRunFlagB;
+    final private AtomicBoolean THREADRUNFLAG;
 
     public JCRC16() {
-        threadRunFlagB = new AtomicBoolean();
+        THREADRUNFLAG = new AtomicBoolean();
         reset();
     }
 
@@ -34,28 +34,28 @@ public class JCRC16 {
      */
     public void calcPostBytes(int FinalCRC_i) {
         Runnable runnable_o = () -> {
-            for (short i = -32768; (i < 32767) && (!threadRunFlagB.get()); ++i) {
+            for (short i = -32768; (i < 32767) && (!THREADRUNFLAG.get()); ++i) {
                 int tempValue_i = this.value;
                 byte[] bytes = ByteBuffer.allocate(2).putShort(i).array();
                 update(bytes[0]);
                 update(bytes[1]);
                 if (value == FinalCRC_i) {
                     Notifier.getInstance().sendCorrectingBytes(i);
-                    threadRunFlagB.set(true);
+                    THREADRUNFLAG.set(true);
                 }
                 value = tempValue_i;
             }
-            threadRunFlagB.set(false);
+            THREADRUNFLAG.set(false);
         };
         (new Thread(runnable_o)).start();
     }
 
     public void reset() {
         this.value = 0;
-        threadRunFlagB.set(false);
+        THREADRUNFLAG.set(false);
     }
 
     public void abort() {
-        threadRunFlagB.set(true);
+        THREADRUNFLAG.set(true);
     }
 }

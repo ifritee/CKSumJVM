@@ -34,11 +34,11 @@ public class RootWindow implements Observer {
     /** Выбранный файл */
     private File selectedFile;
     /** Объект для рсчета контрольной суммы */
-    private JCKSum jckSum;
+    final private JCKSum JCKSUM;
     /** Объект для рсчета CRC-16 */
-    private JCRC16 jcrc16;
+    final private JCRC16 JCRC16;
     /** Словарь делителей */
-    HashMap<JTextField, Integer> radixDict;
+    final HashMap<JTextField, Integer> RADIXES;
     /** Логер */
     public static final Logger LOGGER = Logger.getLogger(RootWindow.class.getName());
 
@@ -46,12 +46,12 @@ public class RootWindow implements Observer {
     public RootWindow() {
         Notifier.getInstance().addObserver(this);
         selectedFile = new File("");
-        jckSum = new JCKSum();
-        jcrc16 = new JCRC16();
-        radixDict = new HashMap<>();
-        radixDict.put(tf_crc_dec, 10);
-        radixDict.put(tf_crc_hex, 16);
-        radixDict.put(tf_crc_oct, 8);
+        JCKSUM = new JCKSum();
+        JCRC16 = new JCRC16();
+        RADIXES = new HashMap<>();
+        RADIXES.put(tf_crc_dec, 10);
+        RADIXES.put(tf_crc_hex, 16);
+        RADIXES.put(tf_crc_oct, 8);
         btn_choose_file.addActionListener(e -> { // Действия при выборе файла
             JFileChooser fileChooser = new JFileChooser();
             eraseData();
@@ -104,7 +104,7 @@ public class RootWindow implements Observer {
                 new Timer().schedule(new TimerTask() {
                     @Override
                     public void run() {
-                        long value = Long.parseLong(tf_crc_dec.getText().length() == 0 ? "0" : tf_crc_dec.getText(), radixDict.get(tf_crc_dec));
+                        long value = Long.parseLong(tf_crc_dec.getText().length() == 0 ? "0" : tf_crc_dec.getText(), RADIXES.get(tf_crc_dec));
                         tf_crc_hex.setText(Long.toHexString(value));
                         tf_crc_oct.setText(Long.toOctalString(value));
                         btn_calculate.setEnabled(tf_crc_dec.getText().length() > 0);
@@ -120,7 +120,7 @@ public class RootWindow implements Observer {
                 new Timer().schedule(new TimerTask() {
                     @Override
                     public void run() {
-                        long value = Long.parseLong(tf_crc_hex.getText().length() == 0 ? "0" : tf_crc_hex.getText(), radixDict.get(tf_crc_hex));
+                        long value = Long.parseLong(tf_crc_hex.getText().length() == 0 ? "0" : tf_crc_hex.getText(), RADIXES.get(tf_crc_hex));
                         tf_crc_dec.setText(Long.toString(value));
                         tf_crc_oct.setText(Long.toOctalString(value));
                         btn_calculate.setEnabled(tf_crc_hex.getText().length() > 0);
@@ -136,7 +136,7 @@ public class RootWindow implements Observer {
                 new Timer().schedule(new TimerTask() {
                     @Override
                     public void run() {
-                        long value = Long.parseLong(tf_crc_oct.getText().length() == 0 ? "0" : tf_crc_oct.getText(), radixDict.get(tf_crc_oct));
+                        long value = Long.parseLong(tf_crc_oct.getText().length() == 0 ? "0" : tf_crc_oct.getText(), RADIXES.get(tf_crc_oct));
                         tf_crc_hex.setText(Long.toHexString(value));
                         tf_crc_dec.setText(Long.toString(value));
                         btn_calculate.setEnabled(tf_crc_oct.getText().length() > 0);
@@ -148,8 +148,8 @@ public class RootWindow implements Observer {
         chb_inject.addItemListener(e -> cb_file_type.setEnabled(e.getStateChange() == ItemEvent.SELECTED));
 
         btn_cancel.addActionListener(e -> {
-            jckSum.abort();
-            jcrc16.abort();
+            JCKSUM.abort();
+            JCRC16.abort();
         });
     }
 
@@ -177,7 +177,7 @@ public class RootWindow implements Observer {
      */
     private void postBytesCalcCRC16(long parseLong) {
         if(parseLong >= 0 && parseLong <= 65535) {
-            jcrc16.calcPostBytes((int) parseLong);
+            JCRC16.calcPostBytes((int) parseLong);
         }
     }
 
@@ -193,7 +193,7 @@ public class RootWindow implements Observer {
                 byte[] bytes = new byte[4];
                 int c = fileInputStream.read(bytes, 0, 4);
                 if(c != -1 && bytes[0] == 0x7f && bytes[1] == 'E' && bytes[2] == 'L' && bytes[3] == 'F') {  // Это ELF файл
-
+                    System.out.println("This is ELF!");
                 }
             } catch(IOException e) {
                 e.printStackTrace();
@@ -207,7 +207,7 @@ public class RootWindow implements Observer {
                 }
             }
         }
-        jckSum.calcPostBytes(parseLong);
+        JCKSUM.calcPostBytes(parseLong);
     }
 
     public JPanel getRootPanel() {
@@ -251,15 +251,15 @@ public class RootWindow implements Observer {
         FileInputStream fileInputStream = null;
         try {
             LOGGER.info("Запуск подсчета CRC16 для файла " + selectedFile);
-            jcrc16.reset();
+            JCRC16.reset();
             fileInputStream = new FileInputStream(selectedFile);
             int c;
             while ((c = fileInputStream.read()) != -1) {
-                jcrc16.update((byte) c);
+                JCRC16.update((byte) c);
             }
-            lb_crc_dec.setText("DEC: " + jcrc16.value);
-            lb_crc_hex.setText("HEX: " + Long.toHexString(jcrc16.value).toUpperCase());
-            lb_crc_oct.setText("OCT: " + Long.toOctalString(jcrc16.value));
+            lb_crc_dec.setText("DEC: " + JCRC16.value);
+            lb_crc_hex.setText("HEX: " + Long.toHexString(JCRC16.value).toUpperCase());
+            lb_crc_oct.setText("OCT: " + Long.toOctalString(JCRC16.value));
         } catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Не удалось обработать файл " + selectedFile, e);
         } catch (NullPointerException e) {
@@ -282,13 +282,13 @@ public class RootWindow implements Observer {
         FileInputStream fileInputStream = null;
         try {
             LOGGER.info("Запуск подсчета CKSum для файла " + selectedFile);
-            jckSum.erase();
+            JCKSUM.erase();
             fileInputStream = new FileInputStream(selectedFile);
             int c;
             while ((c = fileInputStream.read()) != -1) {
-                jckSum.addByte(c);
+                JCKSUM.addByte(c);
             }
-            int value = jckSum.getValue();
+            int value = JCKSUM.getValue();
             lb_crc_dec.setText("DEC: " + value);
             lb_crc_hex.setText("HEX: " + Integer.toHexString(value).toUpperCase());
             lb_crc_oct.setText("OCT: " + Integer.toOctalString(value));

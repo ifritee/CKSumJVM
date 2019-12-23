@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="9814fe05-0721-4b85-83d7-25fc8b49c97b" name="Default Changelist" comment="">
+    <list default="true" id="9814fe05-0721-4b85-83d7-25fc8b49c97b" name="Default Changelist" comment="Добавил константы там где нужно">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/ifritee/develop/jcksum/JCKSum.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/ifritee/develop/jcksum/JCKSum.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/ifritee/develop/jcksum/JCRC16.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/ifritee/develop/jcksum/JCRC16.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/ifritee/develop/jcksum/Notifier.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/ifritee/develop/jcksum/Notifier.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/ifritee/develop/jcksum/Observer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/ifritee/develop/jcksum/Observer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/ifritee/develop/jcksum/RootWindow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/ifritee/develop/jcksum/RootWindow.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -108,7 +107,14 @@
       <option name="project" value="LOCAL" />
       <updated>1577000605130</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Поправил наименования согласно принятой в яве стилистике. Заменил String == &quot;&quot; на equals()">
+      <created>1577123519918</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1577123519918</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -116,7 +122,9 @@
     <MESSAGE value="Добавил расчет корректируещих байтов для cksum" />
     <MESSAGE value="Доработал посчет КС и вывод корректирующих байт в форму" />
     <MESSAGE value="Поправил warning'и" />
-    <option name="LAST_COMMIT_MESSAGE" value="Поправил warning'и" />
+    <MESSAGE value="Поправил наименования согласно принятой в яве стилистике. Заменил String == &quot;&quot; на equals()" />
+    <MESSAGE value="Добавил константы там где нужно" />
+    <option name="LAST_COMMIT_MESSAGE" value="Добавил константы там где нужно" />
   </component>
   <component name="WindowStateProjectService">
     <state x="146" y="54" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1576772575335">
@@ -139,30 +147,30 @@
       <screen x="0" y="24" width="1366" height="744" />
     </state>
     <state x="420" y="145" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.24.1366.744@0.24.1366.744" timestamp="1577000369177" />
-    <state x="431" y="252" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1" timestamp="1577000474730">
+    <state x="431" y="252" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1" timestamp="1577123777175">
       <screen x="0" y="24" width="1366" height="744" />
     </state>
-    <state x="431" y="252" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.24.1366.744@0.24.1366.744" timestamp="1577000474730" />
-    <state x="195" y="24" key="CommitChangelistDialog2" timestamp="1577000605020">
+    <state x="431" y="252" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.24.1366.744@0.24.1366.744" timestamp="1577123777175" />
+    <state x="195" y="24" key="CommitChangelistDialog2" timestamp="1577123832286">
       <screen x="0" y="24" width="1366" height="744" />
     </state>
-    <state x="195" y="24" key="CommitChangelistDialog2/0.24.1366.744@0.24.1366.744" timestamp="1577000605020" />
-    <state width="1320" height="186" key="GridCell.Tab.0.bottom" timestamp="1577123447631">
+    <state x="195" y="24" key="CommitChangelistDialog2/0.24.1366.744@0.24.1366.744" timestamp="1577123832286" />
+    <state width="1320" height="186" key="GridCell.Tab.0.bottom" timestamp="1577123698437">
       <screen x="0" y="24" width="1366" height="744" />
     </state>
-    <state width="1320" height="186" key="GridCell.Tab.0.bottom/0.24.1366.744@0.24.1366.744" timestamp="1577123447631" />
-    <state width="1320" height="186" key="GridCell.Tab.0.center" timestamp="1577123447630">
+    <state width="1320" height="186" key="GridCell.Tab.0.bottom/0.24.1366.744@0.24.1366.744" timestamp="1577123698437" />
+    <state width="1320" height="186" key="GridCell.Tab.0.center" timestamp="1577123698435">
       <screen x="0" y="24" width="1366" height="744" />
     </state>
-    <state width="1320" height="186" key="GridCell.Tab.0.center/0.24.1366.744@0.24.1366.744" timestamp="1577123447630" />
-    <state width="1320" height="186" key="GridCell.Tab.0.left" timestamp="1577123447629">
+    <state width="1320" height="186" key="GridCell.Tab.0.center/0.24.1366.744@0.24.1366.744" timestamp="1577123698435" />
+    <state width="1320" height="186" key="GridCell.Tab.0.left" timestamp="1577123698435">
       <screen x="0" y="24" width="1366" height="744" />
     </state>
-    <state width="1320" height="186" key="GridCell.Tab.0.left/0.24.1366.744@0.24.1366.744" timestamp="1577123447629" />
-    <state width="1320" height="186" key="GridCell.Tab.0.right" timestamp="1577123447630">
+    <state width="1320" height="186" key="GridCell.Tab.0.left/0.24.1366.744@0.24.1366.744" timestamp="1577123698435" />
+    <state width="1320" height="186" key="GridCell.Tab.0.right" timestamp="1577123698436">
       <screen x="0" y="24" width="1366" height="744" />
     </state>
-    <state width="1320" height="186" key="GridCell.Tab.0.right/0.24.1366.744@0.24.1366.744" timestamp="1577123447630" />
+    <state width="1320" height="186" key="GridCell.Tab.0.right/0.24.1366.744@0.24.1366.744" timestamp="1577123698436" />
     <state width="1320" height="223" key="GridCell.Tab.1.bottom" timestamp="1576610980025">
       <screen x="0" y="24" width="1366" height="744" />
     </state>
@@ -187,10 +195,10 @@
       <screen x="0" y="24" width="1366" height="744" />
     </state>
     <state x="557" y="193" key="UIDesigner.ListEditorDialog/0.24.1366.744@0.24.1366.744" timestamp="1577000254543" />
-    <state x="282" y="132" key="Vcs.Push.Dialog.v2" timestamp="1577000608728">
+    <state x="282" y="132" key="Vcs.Push.Dialog.v2" timestamp="1577123521862">
       <screen x="0" y="24" width="1366" height="744" />
     </state>
-    <state x="282" y="132" key="Vcs.Push.Dialog.v2/0.24.1366.744@0.24.1366.744" timestamp="1577000608728" />
+    <state x="282" y="132" key="Vcs.Push.Dialog.v2/0.24.1366.744@0.24.1366.744" timestamp="1577123521862" />
     <state x="368" y="224" key="com.intellij.ide.util.TipDialog" timestamp="1576307603723">
       <screen x="0" y="24" width="1366" height="744" />
     </state>
